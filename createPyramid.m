@@ -6,7 +6,7 @@ function pyr = createPyramid( im )
 % im ? a grayscale image
 %
 % outputs:
-% pyr ? A 7 ª 1 cell of matrices.
+% pyr - A 7 ª 1 cell of matrices.
 
 pyr = cell(1,7);
 pyr{4} = im;
