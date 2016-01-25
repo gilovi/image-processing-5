@@ -29,10 +29,10 @@ function [assignmentPositionsX,assignmentPositionsY,samplingPositionsX,samplingP
 %
 
 %getting assignment centers
-levels = ones(size(inputPatchesCentersX))*4;
+levels = ones(size(inputPatchesCentersX)) * 4;%find(cellfun(@(x) any(x(:)),pyr),1,'last');%* (find(~cellfun(@isempty,pyr),1,'last')-1);
 [x_target,y_target] = transformPointsLevelsUp(inputPatchesCentersX, inputPatchesCentersY,levels, pyr, levelsUp );
-x_target = repmat(3, x_target, x_target, x_target);
-y_target = repmat(3, y_target, y_target, y_target);
+x_target = repmat(x_target, [1,1,3]);
+y_target = repmat(y_target, [1,1,3]);
 assignmentCentersX = round(x_target);
 assignmentCentersY = round(y_target);
 
@@ -44,8 +44,8 @@ sampleCentersY = sampleCentersY + y_shift ;
 
 %transforming centers to patches
 [kx,ky] = meshgrid(-2:2,-2:2);
-kx = permute(kx,[4 5 3 4 1 2]);
-ky = permute(ky,[4 5 3 4 1 2]);
+kx = permute(kx,[3 4 5 1 2]);
+ky = permute(ky,[3 4 5 1 2]);
 assignmentPositionsX = bsxfun(@plus,assignmentCentersX,kx);
 assignmentPositionsY = bsxfun(@plus,assignmentCentersY,ky);
 samplingPositionsX = bsxfun(@plus,sampleCentersX,kx);

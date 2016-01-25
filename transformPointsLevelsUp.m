@@ -1,5 +1,5 @@
 function [ xPositions,yPositions,levels ] = transformPointsLevelsUp( xPositions,yPositions,levels,pyr,levelsUp )
-%TRANSFORMPOINTSLEVELSUP 
+%TRANSFORMPOINTSLEVELSUP Summary of this function goes here
 % Given position of points in some levels of the pyramid,  return their
 % location in an upper levels of the pyramid.
 % Arguments:

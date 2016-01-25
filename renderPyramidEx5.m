@@ -1,5 +1,5 @@
 function image = renderPyramidEx5(pyr)
-%RENDERPYRAMIDEX5 
+%RENDERPYRAMIDEX5 Summary of this function goes here
 %Getting a pyramid and draw it into a single image
 % Arguments:
 % pyr - the pyramid

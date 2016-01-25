@@ -14,3 +14,7 @@ pyr{4} = im;
 for i=3:-1:1
   pyr{i} = imresize(pyr{i+1} ,1/(2^(1/3))); 
 end
+
+for i=5:7
+    pyr{i} = zeros(round(size(pyr{i-1})*(2^(1/3))));
+end

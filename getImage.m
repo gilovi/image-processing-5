@@ -4,30 +4,44 @@ function [image] = getImage(assignmentPositionsX,assignmentPositionsY,samplingPo
 % pyrmamid, and assignment indices in the highres image return a high resolution image
 %
 % Arguments:
-% assignmentPositionsX ? (m ? 4) � (n ? 4) � 3 � 5 � 5 x assignment coordinates in the high resolution image (
+% assignmentPositionsX - (m - 4)  x (n - 4)  x 3  x 5  x 5 assignment coordinates in the high resolution image (
 % getSamplingInformation output)
-% assignmentPositionsY ? (m ? 4) � (n ? 4) � 3 � 5 � 5 y assignment coordinates in the high resolution image (
+% assignmentPositionsY - (m - 4)  x (n - 4)  x 3  x 5  x 5 y assignment coordinates in the high resolution image (
 % getSamplingInformation output)
-% samplingPositionsX ? (m ? 4) � (n ? 4) � 3 � 5 � 5 x sampling coordinates in the rendered pyramid image (
+% samplingPositionsX - (m - 4)  x (n - 4)  x 3  x 5  x 5 sampling coordinates in the rendered pyramid image (
 % getSamplingInformation output)
-% samplingPositionsY ? (m ? 4) � (n ? 4) � 3 � 5 � 5 y sampling coordinates in the rendered pyramid image (
+% samplingPositionsY - (m - 4)  x (n - 4)  x 3  x 5  x 5 y sampling coordinates in the rendered pyramid image (
 % getSamplingInformation output)
-% weights ? (m ? 4) � (n ? 4) � 3 matrix with the weights for each DB candidate
-% emptyHighResImage ? M � N zeros image, where M and N are the dimensions of a level in the pyramid that should
+% weights - (m - 4)  x (n - 4)  x 3 matrix with the weights for each DB candidate
+% emptyHighResImage - M  x N zeros image, where M and N are the dimensions of a level in the pyramid that should
 % be reconstructed in this function
-% renderedPyramid ? a single image containing all levels of the pyramid
+% renderedPyramid - a single image containing all levels of the pyramid
 %
 % Outputs:
-% image ? M � N high resolution image
+% image - M x N high resolution image
 %
-I = repmat(emptyHighResImage,[1,1,3,25]);
-for i=1:3
-    for j = 1:25
-        [xp,yp] = ind2sub([5,5], i);
-        I(:,:,i,j) = interp2(samplingPositionsX(:, :, i, xp:5:end,yp:5:end), samplingPositionsY(:, :, i, xp:5:end,yp:5:end),...
-        renderedPyramid, assignmentPositionsX(:, :, i, xp:5:end,yp:5:end), assignmentPositionsY(:, :, i, xp:5:end,yp:5:end)...
-       ,'cubic');
-    end
+
+
+%I = repmat(emptyHighResImage,[1,1,75]);
+[yp,xp,~] = ind2sub([5,5,3], 1:75);
+fw = repmat(weights, [1,1,1,5,5]);
+fw(:) = 1;
+w = zeros (size(emptyHighResImage));
+for i = 1:25*3
+  
+        im = interp2(renderedPyramid,...
+            samplingPositionsX( xp(i):4:end, yp(i):4:end, :, :, :),...
+            samplingPositionsY( xp(i):4:end, yp(i):4:end, :, :, :), 'cubic');
+        im(isnan(im)) = 0;
+        ind = sub2ind(size(emptyHighResImage)...
+            ,assignmentPositionsY( xp(i):4:end, yp(i):4:end, :, :, :), ...
+            assignmentPositionsX( xp(i):4:end, yp(i):4:end, :, :, :) );
+        wt = fw(xp(i):4:end, yp(i):4:end, :, :, :);
+        emptyHighResImage(ind) = emptyHighResImage(ind) + (wt .* im) ;
+        w(ind) = w(ind) + wt ;
 end
 
-imshow(I(:,:,1,1))
+image = emptyHighResImage./75;
+
+
+

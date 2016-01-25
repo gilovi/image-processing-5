@@ -16,13 +16,11 @@ function [weights] = weightsSetting( imPatches, Dists, pyr ,dbPatchesStd )
 % weights ? (m ? 4) ª (n ? 4) ª 3 matrix with the weights for each DB candidates
 %
 
-    weights = calc_weight(Dists, dbPatchesStd );
-    weights(:,:,3) =  weights(:,:,3) .* (Dists(:,:,3) < threshold( pyr{4},imPatches ));
-
-end
-
-function [w] = calc_weight( d,sig)
-    w = exp(-(d.^2./sig));
+    weights = exp(-(Dists.^2)./dbPatchesStd);%
+    %weights(weights==0) = eps;
+    
+    weights(:,:,3) = weights(:,:,3) .* (Dists(:,:,3) < threshold( pyr{4},imPatches ));
+    
 end
 
 
@@ -30,7 +28,7 @@ function [t] = threshold( im , patches)
     [dx,dy] = translateImageHalfPixel(im);
     
     %[x,y,patches] = samplePatches( im , 0 );
-    [~,~,px] = samplePatches( dx , 0 );
+    [x,y,px] = samplePatches( dx , 0 );
     [~,~,py] = samplePatches( dy , 0 );
     
     % change shape to 25 X (num of patches)
@@ -38,5 +36,5 @@ function [t] = threshold( im , patches)
     px = reshape(permute(reshape(px, numel(x),5,5),[2,3,1]),25,numel(x));
     py = reshape(permute(reshape(py, numel(y),5,5),[2,3,1]),25,numel(y));
     
-    t = (sqrt(sum((patches - px).^2)) + sqrt(sum((patches - py).^2)))'/2;
+    t = reshape((sqrt(sum((patches - px).^2)) + sqrt(sum((patches - py).^2)))'/2,size(x));
 end

@@ -1,5 +1,5 @@
 function [ out_x,out_y ] = translateImageHalfPixel( im )
-%TANSLATEIMAGEHALFPIXEL 
+%TANSLATEIMAGEHALFPIXEL Summary of this function goes here
 %Given an image return two images: out_x,out_y that are the result of shifting the image
 %0.5 pixel right, and 0.5 pixel down respectively
 % Arguments:

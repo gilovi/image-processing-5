@@ -20,17 +20,19 @@ function [p_x,p_y, patches] = samplePatches( im , border )
 l_c = p_x(:);
 l_r = p_y(:);
 
-% Y = blockproc(I,[1,1],fun,'BorderSize',[2,2], 'TrimBorder' ,false,'UseParallel',true);
-% m = mat2cell(Y,ones(1,r)*5,ones(1,c)*5);
-% m = m(3 + border : end - (2+border) , 3+border : end - (2+border));
+%  im=im2double(im);%a
+%  fun = @(block_struct) (block_struct.data); %a
+%  Y = blockproc(im,[1,1],fun,'BorderSize',[2,2], 'TrimBorder' ,false,'UseParallel',false); %a
+%  m = mat2cell(Y,ones(1,r)*5,ones(1,c)*5); %a
+%  m = m(3 + border : end - (2+border) , 3+border : end - (2+border)); %a
 % 
-% patches = permute((cell2mat(reshape(m,1,1,2,2))),[3,4,1,2]);
-%%%r-2*(2 + border)* c-2*(2 + border)
-patches = zeros(5 , 5, length(l_r));
-%cel_patch = cell(r*c);
-for i = 1 : length(l_r) 
-      patches(:,:,i) = im(l_r(i)-2:l_r(i)+2 , l_c(i)-2:l_c(i)+2);
+% [mr,mc] = size(m); %a
+% patches = reshape(permute((cell2mat(reshape(m,1,1,numel(m)))), [3 1 2]),mr,mc,5,5); %a
+
+patches = zeros(5 , 5, length(l_r)); %o
+
+for i = 1 : length(l_r)  %o
+      patches(:,:,i) = im(l_r(i)-2:l_r(i)+2 , l_c(i)-2:l_c(i)+2); %o
 end
 
-patches = permute(reshape(patches,5,5,r-2*(2 + border),c-2*(2 + border)),[3,4,1,2]);
-
+patches = permute(reshape(patches,5,5,r-2*(2 + border),c-2*(2 + border)),[3,4,1,2]); %o
