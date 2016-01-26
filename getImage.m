@@ -21,33 +21,52 @@ function [image] = getImage(assignmentPositionsX,assignmentPositionsY,samplingPo
 % image - M x N high resolution image
 %
 [out_r,out_c] = size(emptyHighResImage);
-[a, b, c, d, e] = size(assignmentPositionsX);
+[a, b,~,~,~] = size(assignmentPositionsX);
 
+weights = repmat(weights,[1 1 1 5 5]);
 
-ass_X = permute(assignmentPositionsX,[1 4 2 5 3]);
-ass_X=reshape(ass_X,size(ass_X,1)*5,size(ass_X,3)*5,3);
-ass_Y = permute(assignmentPositionsY,[1 4 2 5 3]);
-ass_Y=reshape(ass_Y,size(ass_Y,1)*5,size(ass_Y,3)*5,3);
-samp_X = permute(samplingPositionsX,[1 4 2 5 3]);
-samp_X=reshape(samp_X,size(samp_X,1)*5,size(samp_X,3)*5,3);
-samp_Y = permute(samplingPositionsY,[1 4 2 5 3]);
-samp_Y = reshape(samp_Y,size(samp_Y,1)*5,size(samp_Y,3)*5,3);
+%resaping the matrices so we sample every 5th patch
+assignmentPositionsX = permute(assignmentPositionsX,[1 4 2 5 3]);
+assignmentPositionsX=reshape(assignmentPositionsX,size(assignmentPositionsX,1)*5,...
+    size(assignmentPositionsX,3)*5,3);
+assignmentPositionsY = permute(assignmentPositionsY,[1 4 2 5 3]);
+assignmentPositionsY=reshape(assignmentPositionsY,size(assignmentPositionsY,1)*5,...
+    size(assignmentPositionsY,3)*5,3);
+samplingPositionsX = permute(samplingPositionsX,[1 4 2 5 3]);
+samplingPositionsX=reshape(samplingPositionsX,size(samplingPositionsX,1)*5,...
+    size(samplingPositionsX,3)*5,3);
+samplingPositionsY = permute(samplingPositionsY,[1 4 2 5 3]);
+samplingPositionsY = reshape(samplingPositionsY,size(samplingPositionsY,1)*5,...
+    size(samplingPositionsY,3)*5,3);
+weights = permute(weights*100,[1 4 2 5 3]);
+weights = reshape(weights,size(weights,1)*5,size(weights,3)*5,3);
 
+% adding shifts to the assignment so we get sampled images in large image (sized 5*out_r x 5*out_c x 3) 
 x_shifts = (repmat(0:out_c: 4*out_c, b,1));
-ass_X = bsxfun(@plus, ass_X , x_shifts(:)');
+assignmentPositionsX = bsxfun(@plus, assignmentPositionsX , x_shifts(:)');
 y_shifts = (repmat(0:out_r: 4*out_r, a,1));
-ass_Y = bsxfun(@plus, ass_Y , y_shifts(:));
+assignmentPositionsY = bsxfun(@plus, assignmentPositionsY , y_shifts(:));
 
-samp_im = interp2(renderedPyramid, samp_X, samp_Y );
+samp_im = interp2(renderedPyramid, samplingPositionsX, samplingPositionsY );
 
-%for loop 1:3!!
-im = zeros(5*out_r,5*out_c);
-im(sub2ind([5*out_r, 5*out_c],ass_Y,ass_X)) = samp_im;
-m = cell2mat(reshape(mat2cell(im,ones(1,5)*out_r,ones(1,5)*out_c) ,1,1,25));
+% rendering 75 images 
+ind = repmat(permute(1:3,[1,3,2]),size(assignmentPositionsY,1),size(assignmentPositionsY,2));
+im = zeros(5*out_r,5*out_c,3);
+im(sub2ind([5*out_r, 5*out_c,3],assignmentPositionsY,assignmentPositionsX, ind)) = samp_im;
+im = reshape(im,size(im,1)/5,5,size(im,2)/5,5,3);
+im = permute(reshape(permute(im,[2,4,5,1,3]), 75,out_r,out_c),[2 3 1]);
 
-image= sum(m,3)/25;
+%rendering 75 weights
+w = ones(5*out_r,5*out_c,3);
+w(sub2ind([5*out_r, 5*out_c,3],assignmentPositionsY,assignmentPositionsX, ind)) = weights;
+w = reshape(w,size(w,1)/5,5,size(w,2)/5,5,3);
+w = permute(reshape(permute(w,[2,4,5,1,3]), 75,out_r,out_c),[2 3 1]);
 
-%figure;imshow(uint8(im))
+image = sum(im.*w,3)./sum(w,3);
+image (isnan(image)) = 0;
+%image= sum(im,3)/75;
+
+%figure;imshow(uint8(image))
 %I = repmat(emptyHighResImage,[1,1,75]);
 
 
