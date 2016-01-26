@@ -1,0 +1,63 @@
+gilovi
+30060449
+
+matlab version: 2014a
+
+
+Exercise 5: Super Resolution
+=================================================
+
+submitted files:
+----------------
+createDB
+createPyramid
+findNearestNeighbors
+getImage
+getSamplingCenters
+getSamplingInformation
+MyResults
+patch_num
+renderPyramidEx5
+samplePatches
+superResolution
+threshold
+transformPointsLevelsUp
+translateImageHalfPixel
+weightsSetting
+README
+
+butterfly.png
+small_minion.jpg
+monument.jpg
+
+NOTE:
+-----
+In the getImage file I applied some anti loop black magic.
+
+My examples:
+------------
+butterfly:
+-=-=-=-=-=- 
+1. the procedure keeps mostly big patterns and patterns that are repetitive.
+for example, the wings shape, the black marks on the butterfly's wings etc.
+
+2. the finer details such that smaller images in the pyramid would loose, are lost.
+for example,the round shape of the marks is distorted, the fine lines in the upper 
+right mark, the round shape of the tip of the wing etc
+
+small_minion:
+-=-=-=-=-=-=-
+1. this is a cartoon with small amount of colors and clean shapes, so the most 
+of the details remain...
+
+2. we can still see some color quantization on the minion's pants.
+once again, round objects gets distorted, the glasses, the eyes, etc.
+
+monument:
+-=-=-=-=
+1. the floor and the poles are repetitive so it is nicely restored,
+2. the grass on the left and basically everything outside the main corridor,
+got some color quantization, and looks like an oil painting...
+
+
+

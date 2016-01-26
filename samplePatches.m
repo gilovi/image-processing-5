@@ -29,10 +29,10 @@ l_r = p_y(:);
 % [mr,mc] = size(m); %a
 % patches = reshape(permute((cell2mat(reshape(m,1,1,numel(m)))), [3 1 2]),mr,mc,5,5); %a
 
-patches = zeros(5 , 5, length(l_r)); %o
+patches = zeros(5 , 5, length(l_r)); 
 
-for i = 1 : length(l_r)  %o
-      patches(:,:,i) = im(l_r(i)-2:l_r(i)+2 , l_c(i)-2:l_c(i)+2); %o
+for i = 1 : length(l_r)  
+      patches(:,:,i) = im(l_r(i)-2:l_r(i)+2 , l_c(i)-2:l_c(i)+2);
 end
 
 patches = permute(reshape(patches,5,5,r-2*(2 + border),c-2*(2 + border)),[3,4,1,2]); %o

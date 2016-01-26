@@ -15,13 +15,13 @@ function [weights] = weightsSetting( imPatches, Dists, pyr ,dbPatchesStd )
 % Outputs:
 % weights ? (m ? 4) ª (n ? 4) ª 3 matrix with the weights for each DB candidates
 %
-    D = mat2gray(Dists);
-    weights = exp(-(D.^2)./dbPatchesStd);%
+    weights = exp(-(Dists.^2)./dbPatchesStd);%
     %weights(weights==0) = eps;
     
     weights(:,:,3) = weights(:,:,3) .* (Dists(:,:,3) < threshold( pyr{4},imPatches ));
     
-    weights = mat2gray(weights)*10;
+    %normalizing
+    weights = mat2gray(weights)*1000;
 end
 
 

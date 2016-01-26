@@ -33,8 +33,8 @@ levels = ones(size(inputPatchesCentersX)) * 4;%find(cellfun(@(x) any(x(:)),pyr),
 [x_target,y_target] = transformPointsLevelsUp(inputPatchesCentersX, inputPatchesCentersY, levels, pyr, levelsUp );
 x_target = repmat(x_target, [1,1,3]);
 y_target = repmat(y_target, [1,1,3]);
-assignmentCentersX = ceil(x_target);
-assignmentCentersY = ceil(y_target);
+assignmentCentersX = round(x_target);
+assignmentCentersY = round(y_target);
 
 %shifting sample centers
 x_shift = assignmentCentersX - x_target;

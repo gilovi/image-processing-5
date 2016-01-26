@@ -26,5 +26,5 @@ renderedPyramid = renderPyramidEx5(pyr);
 [sampleCentersX, sampleCentersY, levels] = transformPointsLevelsUp...
     (xCenters, yCenters, centersPyrLevel, pyr, levelsUp );
 
-shift = cumsum([0,cellfun(@(x) size(x,2) , pyr)]);
+shift = cumsum([0,cellfun(@(x) size(x,2) , pyr')]);
 sampleCentersX = sampleCentersX + shift(levels);

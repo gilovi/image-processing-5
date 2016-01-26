@@ -19,5 +19,5 @@ patch_size = 5*5;
 im_p = reshape(permute(imPatches,[2,3,1]), patch_size , size(imPatches,1))';
 db_p = reshape(permute(dbPatches,[2,3,1]), patch_size , size(dbPatches,1))';
 
-[idx,Dist] = knnsearch(db_p,im_p,'K',3,'Distance','euclidean');
+[idx,Dist] = knnsearch(db_p,im_p,'K',3,'NSMethod','kdtree');
 

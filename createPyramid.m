@@ -18,3 +18,4 @@ end
 for i=5:7
     pyr{i} = zeros(round(size(pyr{i-1})*(2^(1/3))));
 end
+pyr = pyr';
