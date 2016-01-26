@@ -30,11 +30,11 @@ function [assignmentPositionsX,assignmentPositionsY,samplingPositionsX,samplingP
 
 %getting assignment centers
 levels = ones(size(inputPatchesCentersX)) * 4;%find(cellfun(@(x) any(x(:)),pyr),1,'last');%* (find(~cellfun(@isempty,pyr),1,'last')-1);
-[x_target,y_target] = transformPointsLevelsUp(inputPatchesCentersX, inputPatchesCentersY,levels, pyr, levelsUp );
+[x_target,y_target] = transformPointsLevelsUp(inputPatchesCentersX, inputPatchesCentersY, levels, pyr, levelsUp );
 x_target = repmat(x_target, [1,1,3]);
 y_target = repmat(y_target, [1,1,3]);
-assignmentCentersX = round(x_target);
-assignmentCentersY = round(y_target);
+assignmentCentersX = ceil(x_target);
+assignmentCentersY = ceil(y_target);
 
 %shifting sample centers
 x_shift = assignmentCentersX - x_target;
